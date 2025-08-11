@@ -38,6 +38,20 @@ def process_all_images(model: str = "hog", encodings_location: Path = DEFAULT_EN
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
 
+    # Build counters dict from existing files
+    counters = {}
+    for file in OUTPUT_IDENTIFIED_PATH.glob("*.png"):
+        # filename like "Joao_2.png" or "Maria_1.png"
+        stem = file.stem  # e.g. "Joao_2"
+        if "_" in stem:
+            name_part, number_part = stem.rsplit("_", 1)
+            if number_part.isdigit():
+                number = int(number_part)
+                counters[name_part] = max(counters.get(name_part, 0), number)
+        else:
+            # If filename doesn't have _, treat whole as name with counter=0
+            counters[stem] = max(counters.get(stem, 0), 0)
+
     for img_path in IMAGES_TO_DETECT_PATH.glob("*.*"):
         input_image = face_recognition.load_image_file(img_path)
         input_face_locations = face_recognition.face_locations(input_image, model=model)
@@ -60,15 +74,17 @@ def process_all_images(model: str = "hog", encodings_location: Path = DEFAULT_EN
 
         del draw
 
-        # Remove duplicates while keeping order
-        detected_names = list(dict.fromkeys(detected_names))
-
-        # Build filename
+        detected_names = list(dict.fromkeys(detected_names))  # Remove duplicates keeping order
         names_str = "_".join(detected_names)
-        output_file = OUTPUT_IDENTIFIED_PATH / f"{names_str}_{img_path.name}"
+
+        # Update counter for this combined name string
+        count = counters.get(names_str, 0) + 1
+        counters[names_str] = count
+
+        output_file = OUTPUT_IDENTIFIED_PATH / f"{names_str}_{count}.png"
         pillow_image.save(output_file)
 
-        print(f"{img_path.name} -> {names_str}")
+        print(f"{img_path.name} -> {names_str}_{count}")
 
 # Run the process
 process_all_images()
