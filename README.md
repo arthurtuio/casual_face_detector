@@ -1,12 +1,25 @@
 # casual_face_detector
 
-https://realpython.com/face-recognition-with-python/
+Made with https://realpython.com/face-recognition-with-python/ and Vibe Coding
 
+Automate student identification in photos to simplify attendance and photo organization. Uses `face_recognition` for detection and Streamlit for a simple web UI.
 
-Algorythim: detector.py
+---
 
-Code logic
-- batch process the "images_to_detect" folder, 
-- detect the face(s) in each photo, 
-- classify them, 
-- and save a copy of each photo in a new folder (say, output/identified_photos/) where the filename is renamed to match the student’s name.
+## Features
+
+- Upload and label student training photos.
+- Generate and update face encodings.
+- Detect and recognize faces in uploaded photos.
+- Rename recognized photos by student names with counters (e.g., `Joao_1.png`).
+- Option to save photos with or without bounding boxes.
+- Download results as a ZIP archive via Streamlit.
+
+---
+
+## Setup
+
+1. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
