@@ -21,5 +21,20 @@ Automate student identification in photos to simplify attendance and photo organ
 
 1. Install dependencies:
 
-   ```bash
+```bash
    pip install -r requirements.txt
+  ```
+
+   
+2. Organize training photos (optional):
+
+```
+training/
+├── Joao/
+└── Maria/
+```
+
+3. Run the app
+```bash
+    streamlit run streamlit_app.py
+  ```
