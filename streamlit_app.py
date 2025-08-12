@@ -19,6 +19,17 @@ TRAINING_DIR.mkdir(exist_ok=True)
 DETECT_DIR.mkdir(exist_ok=True)
 OUTPUT_IDENTIFIED_PATH.mkdir(parents=True, exist_ok=True)
 
+def listar_recursivo(path):
+    itens = []
+    for root, dirs, files in os.walk(path):
+        nivel = root.replace(path, '').count(os.sep)
+        indent = ' ' * 4 * nivel  # indentação visual
+        itens.append(f"{indent}{os.path.basename(root)}/")
+        subindent = ' ' * 4 * (nivel + 1)
+        for f in files:
+            itens.append(f"{subindent}{f}")
+    return itens
+
 st.title("📸 Ferramenta de Reconhecimento Facial - Sala de Aula")
 
 # ===============================
@@ -51,6 +62,21 @@ if st.button("Salvar Fotos de Treinamento"):
 # ===============================
 # SEÇÃO 2: Gerar/Atualizar codificações
 # ===============================
+
+if st.button('Listar pastas de treinamento'):
+    training_path = './training'
+    if os.path.exists(training_path) and os.path.isdir(training_path):
+        conteudo = listar_recursivo(training_path)
+        if conteudo:
+            # junta tudo numa única string com quebras de linha
+            texto_completo = "\n".join(conteudo)
+            # mostra com markdown em bloco de código para preservar indentação
+            st.markdown(f"```\n{texto_completo}\n```")
+        else:
+            st.write("A pasta training está vazia.")
+    else:
+        st.write("A pasta training não foi encontrada.")
+
 st.header("2️⃣ Gerar/Atualizar Codificações")
 
 if st.button("Executar Codificação"):
