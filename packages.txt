@@ -5,3 +5,4 @@ gcc
 g++
 make
 libboost-all-dev
+libx11-dev
