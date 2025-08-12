@@ -119,4 +119,5 @@ def process_all_images(
         print(f"{img_path.name} -> {names_str}_{count}")
 
 # Run the process
-process_all_images()
+if __name__ == '__main__':
+    process_all_images()

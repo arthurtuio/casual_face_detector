@@ -20,5 +20,5 @@ def encode_known_faces(model: str = "hog", encodings_location: Path = DEFAULT_EN
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
 
-
-encode_known_faces()
+if __name__ == '__main__':
+    encode_known_faces()
