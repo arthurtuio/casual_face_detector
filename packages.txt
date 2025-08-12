@@ -6,3 +6,6 @@ g++
 make
 libboost-all-dev
 libx11-dev
+libgl1
+freeglut3-dev
+libgtk2.0-dev
