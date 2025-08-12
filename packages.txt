@@ -4,3 +4,4 @@ python3-distutils
 gcc
 g++
 make
+libboost-all-dev
