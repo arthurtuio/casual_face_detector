@@ -1,5 +1,4 @@
 face_recognition @ git+https://github.com/arthurtuio/face_recognition.git
-numpy==1.24.2
 Pillow==9.4.0
 streamlit
 setuptools==68.0.0
