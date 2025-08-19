@@ -28,7 +28,7 @@ class Auth0Login:
         self.domain = st.secrets["auth0"]["domain"]
         self.client_id = st.secrets["auth0"]["client_id"]
         self.client_secret = st.secrets["auth0"]["client_secret"]
-        self.redirect_uri = "http://localhost:8501/" # "https://casualfacedetector-45z6692ee8yhuvm6j4inxc.streamlit.app/" #
+        self.redirect_uri = "https://casualfacedetector-45z6692ee8yhuvm6j4inxc.streamlit.app/" # "http://localhost:8501/" #
 
     def get_auth_url(self):
         print("Entrando no metodo get_auth_url...")
