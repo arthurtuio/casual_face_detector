@@ -38,3 +38,11 @@ training/
 ```bash
     streamlit run streamlit_app.py
   ```
+
+---
+
+## Testing locally and Deploying
+
+To test the app locally, just run the "app_core_logic" (`streamlit run app_core_logic.py`)
+
+- This is needed because the production code expects that the url variable is the production one
