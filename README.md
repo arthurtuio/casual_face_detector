@@ -46,3 +46,5 @@ training/
 To test the app locally, just run the "app_core_logic" (`streamlit run app_core_logic.py`)
 
 - This is needed because the production code expects that the url variable is the production one
+
+You should be able to test any module (`modules/`) indepentendely
