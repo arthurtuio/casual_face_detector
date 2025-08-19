@@ -15,6 +15,6 @@ auth = Auth0Login()
 user = auth.login()
 
 if user:
-    st.write(f"Bem-vindo, {user['name']}!")
+    st.write(f"Bem-vindo!")
     # resto do app aqui
     main_logic()
