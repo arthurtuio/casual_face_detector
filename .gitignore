@@ -2,3 +2,4 @@
 output/
 training/
 images_to_detect/
+.streamlit/secrets.toml
