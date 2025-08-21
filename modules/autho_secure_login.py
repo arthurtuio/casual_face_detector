@@ -1,7 +1,6 @@
 # autho_secure_login.py
 import streamlit as st
 import requests
-import os
 
 
 def add_login_button(auth_url):
@@ -28,10 +27,10 @@ class Auth0Login:
         self.domain = st.secrets["auth0"]["domain"]
         self.client_id = st.secrets["auth0"]["client_id"]
         self.client_secret = st.secrets["auth0"]["client_secret"]
-        self.redirect_uri = "https://casualfacedetector-45z6692ee8yhuvm6j4inxc.streamlit.app/" # "http://localhost:8501/" #
+        self.redirect_uri =  "https://casualfacedetector-45z6692ee8yhuvm6j4inxc.streamlit.app/" # "http://localhost:8501/" #
 
     def get_auth_url(self):
-        print("Entrando no metodo get_auth_url...")
+        # print("Entrando no metodo get_auth_url...")
         return (
             f"https://{self.domain}/authorize?"
             f"audience=https://{self.domain}/userinfo&"
@@ -70,7 +69,7 @@ class Auth0Login:
                 st.stop()
 
     def exchange_code_for_token(self, code):
-        print("Entrando no metodo exchange_code_for_token...")
+        # print("Entrando no metodo exchange_code_for_token...")
 
         url = f"https://{self.domain}/oauth/token"
         payload = {
@@ -83,7 +82,7 @@ class Auth0Login:
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         resp = requests.post(url, data=payload, headers=headers)
 
-        # Debug logs
+        # # Debug logs
         # print("Status code:", resp.status_code)
         # print("Response text:", resp.text)
         # print(f"Payload: {payload}")
