@@ -2,7 +2,7 @@ import os
 import streamlit as st
 
 from app_core_logic import main_logic
-from modules.autho_secure_login import Auth0Login
+from modules.secure_login__autho import Auth0Login
 
 os.environ["STREAMLIT_WATCHDOG_DISABLE"] = "true" # acho que nao to usando pra nada
 
