@@ -1,4 +1,6 @@
 # secrets_secure_login.py
+from __future__ import annotations
+
 import streamlit as st
 import hashlib
 import time
@@ -62,13 +64,16 @@ class SecretsLogin:
 
         return True
 
+    def get_user(self) -> str | None:
+        """Retorna o usuário logado, ou None se não houver."""
+        return st.session_state.get("auth_user", None)
+
     def logout(self):
         """Finaliza a sessão do usuário."""
         st.session_state["auth_user"] = None
         st.session_state["auth_expiry"] = None
         st.success("🚪 Sessão encerrada.")
         st.rerun()
-
 
 # Exemplo de uso
 if __name__ == "__main__":
@@ -78,5 +83,7 @@ if __name__ == "__main__":
         auth.login_form()
     else:
         st.write(f"🎉 Você está logado como **{st.session_state['auth_user']}**")
+        user = auth.get_user()
+        st.write(f"📂 Pasta de trabalho: training/{user}/")
         if st.button("Logout"):
             auth.logout()
