@@ -4,3 +4,4 @@ training/
 images_to_detect/
 .streamlit/secrets.toml
 hasher.py
+fotos_identificadas.zip

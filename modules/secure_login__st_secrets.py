@@ -5,6 +5,8 @@ import streamlit as st
 import hashlib
 import time
 
+from utils.dir_utils import DirUtils
+
 
 def hash_password(password: str) -> str:
     """Retorna o hash SHA256 da senha."""
@@ -70,6 +72,10 @@ class SecretsLogin:
 
     def logout(self):
         """Finaliza a sessão do usuário."""
+        DirUtils(
+            logged_username=st.session_state["auth_user"]
+        ).wipe_user_paths()
+
         st.session_state["auth_user"] = None
         st.session_state["auth_expiry"] = None
         st.success("🚪 Sessão encerrada.")

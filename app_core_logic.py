@@ -8,15 +8,15 @@ import os
 from pathlib import Path
 from encode import encode_known_faces
 from detector import process_all_images
+from utils.dir_utils import DirUtils
 
 
-def add_folder_prefix_to_username(logged_username):
-    return f"user__{logged_username}"
+
 
 
 class AppCoreLogic:
     def __init__(self, logged_username):
-        self.logged_username = add_folder_prefix_to_username(logged_username)
+        self.logged_username = logged_username
 
 
     def listar_recursivo(self, path):
@@ -30,32 +30,13 @@ class AppCoreLogic:
                 itens.append(f"{subindent}{f}")
         return itens
 
-    def create_user_paths(self):
-        """
-        Creates user-specific directories for training, detection and output.
-        Returns the 3 paths as Path objects.
-        """
-        base = Path(self.logged_username)
-
-        training_dir   = base / "training"
-        detect_dir     = base / "images_to_detect"
-        output_dir     = base / "output" / "identified_photos"
-        encondings_dir = base / "output"
-
-        for p in [training_dir, detect_dir, output_dir]:
-            p.mkdir(parents=True, exist_ok=True)
-
-        return training_dir, detect_dir, output_dir, encondings_dir
-
     def main_logic(self):
         (
             TRAINING_DIR,
             DETECT_DIR,
             OUTPUT_IDENTIFIED_PATH,
             ENCODINGS_PATH
-        ) = self.create_user_paths()
-
-        print(f"TRAINING_DIR: {TRAINING_DIR}, {type(TRAINING_DIR)}")
+        ) = DirUtils(self.logged_username).create_user_paths()
 
         # ===============================
         # SEÇÃO 1: Adicionar fotos de treino
