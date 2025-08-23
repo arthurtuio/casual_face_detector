@@ -1,11 +1,19 @@
 import face_recognition
 import pickle
-from config import *
+from pathlib import Path
 
-def encode_known_faces(model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH) -> None:
+
+def encode_known_faces(
+        encodings_path,
+        training_path,
+        model: str = "hog",
+) -> None:
+
+    encodings_location = Path(f"{encodings_path}/encodings.pkl")
+
     names = []
     encodings = []
-    for filepath in Path("training").glob("*/*"):
+    for filepath in training_path.glob("*/*"):
         name = filepath.parent.name
         image = face_recognition.load_image_file(filepath)
 

@@ -37,17 +37,25 @@ class AppCoreLogic:
         """
         base = Path(self.logged_username)
 
-        training_dir = base / "training"
-        detect_dir   = base / "images_to_detect"
-        output_dir   = base / "output" / "identified_photos"
+        training_dir   = base / "training"
+        detect_dir     = base / "images_to_detect"
+        output_dir     = base / "output" / "identified_photos"
+        encondings_dir = base / "output"
 
         for p in [training_dir, detect_dir, output_dir]:
             p.mkdir(parents=True, exist_ok=True)
 
-        return training_dir, detect_dir, output_dir
+        return training_dir, detect_dir, output_dir, encondings_dir
 
     def main_logic(self):
-        TRAINING_DIR, DETECT_DIR, OUTPUT_IDENTIFIED_PATH = self.create_user_paths()
+        (
+            TRAINING_DIR,
+            DETECT_DIR,
+            OUTPUT_IDENTIFIED_PATH,
+            ENCODINGS_PATH
+        ) = self.create_user_paths()
+
+        print(f"TRAINING_DIR: {TRAINING_DIR}, {type(TRAINING_DIR)}")
 
         # ===============================
         # SEÇÃO 1: Adicionar fotos de treino
@@ -81,7 +89,7 @@ class AppCoreLogic:
         # ===============================
 
         if st.button('Listar pastas de treinamento'):
-            training_path = 'training'
+            training_path = str(TRAINING_DIR) # 'training'
             if os.path.exists(training_path) and os.path.isdir(training_path):
                 conteudo = self.listar_recursivo(training_path)
                 if conteudo:
@@ -97,7 +105,10 @@ class AppCoreLogic:
         st.header("2️⃣ Gerar/Atualizar Codificações")
 
         if st.button("Executar Codificação"):
-            encode_known_faces()
+            encode_known_faces(
+                encodings_path=ENCODINGS_PATH,
+                training_path=TRAINING_DIR
+            )
             st.success("Codificações atualizadas com sucesso!")
 
         # ===============================
@@ -124,7 +135,11 @@ class AppCoreLogic:
                     f.write(file.getbuffer())
 
             # Executar detecção
-            process_all_images()
+            process_all_images(
+                encodings_path=ENCODINGS_PATH,
+                output_identified_path=OUTPUT_IDENTIFIED_PATH,
+                images_to_detect_path=DETECT_DIR
+            )
 
             # Criar ZIP com resultados
             zip_filename = "fotos_identificadas.zip"

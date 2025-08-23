@@ -3,12 +3,13 @@ from collections import Counter
 from PIL import Image, ImageDraw
 import face_recognition
 from config import *
+from pathlib import Path
 
 
-# Ensure output dirs
-Path("training").mkdir(exist_ok=True)
-Path("output").mkdir(exist_ok=True)
-OUTPUT_IDENTIFIED_PATH.mkdir(exist_ok=True)
+# # Ensure output dirs - atualizado pq agora as pastas sao por usuario
+# Path("training").mkdir(exist_ok=True)
+# Path("output").mkdir(exist_ok=True)
+# OUTPUT_IDENTIFIED_PATH.mkdir(exist_ok=True)
 
 def _display_face(draw, bounding_box, name):
     top, right, bottom, left = bounding_box
@@ -35,9 +36,11 @@ def _recognize_face(unknown_encoding, loaded_encodings):
         return votes.most_common(1)[0][0]
 
 def process_all_images(
+    encodings_path,
+    output_identified_path,
+    images_to_detect_path,
     model: str = "hog",
-    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
-    draw_boxes: bool = False
+    draw_boxes: bool = False,
 ):
     """
     Process all images in the IMAGES_TO_DETECT_PATH folder to detect and recognize faces,
@@ -45,7 +48,6 @@ def process_all_images(
 
     Parameters:
     - model (str): The face detection model to use ('hog' or 'cnn'). Default is 'hog'. NUNCA MEXI, E PROVAVELMENTE N PRECISA MEXER
-    - encodings_location (Path): Path to the pickle file containing known face encodings.
     - draw_boxes (bool): Whether to draw bounding boxes and names on the output images before saving.
                          If False, images are saved without annotations but still renamed accordingly.
 
@@ -62,12 +64,14 @@ def process_all_images(
     - Unknown faces are labeled as "Unknown".
     - Original images are not modified or deleted.
     """
+    encodings_location = Path(f"{encodings_path}/encodings.pkl")
+
     with encodings_location.open(mode="rb") as f:
         loaded_encodings = pickle.load(f)
 
     # Build counters dict from existing files
     counters = {}
-    for file in OUTPUT_IDENTIFIED_PATH.glob("*.png"):
+    for file in output_identified_path.glob("*.png"):
         stem = file.stem
         if "_" in stem:
             name_part, number_part = stem.rsplit("_", 1)
@@ -77,7 +81,7 @@ def process_all_images(
         else:
             counters[stem] = max(counters.get(stem, 0), 0)
 
-    for img_path in IMAGES_TO_DETECT_PATH.glob("*.*"):
+    for img_path in images_to_detect_path.glob("*.*"):
         input_image = face_recognition.load_image_file(img_path)
         input_face_locations = face_recognition.face_locations(input_image, model=model)
         input_face_encodings = face_recognition.face_encodings(input_image, input_face_locations)
@@ -108,7 +112,7 @@ def process_all_images(
         count = counters.get(names_str, 0) + 1
         counters[names_str] = count
 
-        output_file = OUTPUT_IDENTIFIED_PATH / f"{names_str}_{count}.png"
+        output_file = output_identified_path / f"{names_str}_{count}.png"
 
         if draw_boxes:
             pillow_image.save(output_file)
